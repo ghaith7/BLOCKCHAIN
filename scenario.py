@@ -1,15 +1,38 @@
-from Voting import BlockChain
+from VoteChain import VoteChain
+import math
+from vote import vote
+voteChain= VoteChain()
+Candidates = ["zyzz" , "rick sanchez" , "giorno giovanna"]
 
-blockchain= BlockChain()
+def results():
+    res = {}
+    for c in Candidates:
+        res[c]=0
+    vs=voteChain.votes[1:]
+    for v in vs:
+        for t in v["transaction"]:
+            candidate=t["recipient"]
+            points=t["amount"]
+            res.update({candidate : points + res[candidate]})
+    print(res)
 
-v10 = blockchain.new_transaction("voter1","condidat1",6)
-v11 = blockchain.new_transaction("voter1","condidat2",4)
-v12 = blockchain.new_transaction("voter1","condidat3",1) 
-blockchain.new_block(proof=5555)
-
-v20 = blockchain.new_transaction("voter2","condidat1",1)
-v21 = blockchain.new_transaction("voter2","condidat2",4)
-v22 = blockchain.new_transaction("voter2","condidat3",6) 
-blockchain.new_block(proof=5555)
-
-print("votes",blockchain.chain)
+while(True):
+    print("""
+    1) vote
+    2) see results
+    3) quit
+    """)
+    try : 
+        choice = (int)(input("type the chosen option : "))
+    except: 
+        print("wrong!!! choose again ... ")
+        choice = 4
+    if(choice==1):
+        vote(voteChain,Candidates)
+    else:
+        if(choice==2):
+            results()
+        else:
+            if(choice == 3 ):
+                break
+    
